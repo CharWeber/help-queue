@@ -8,10 +8,19 @@ class TicketControl extends React.Component {
     super(props);
     this.state = {
       formVisibleOnPage: false,
-      timesClicked: 0
+      timesClicked: 0,
+      mainTicketList: []
     };
     this.handleClick = this.handleClick.bind(this);
   }
+
+  handleAddingNewTicketToList = (newTicket) => {
+    const newMainTicketList = this.state.mainTicketList.concat(newTicket);
+    this.setState({mainTicketList: newMainTicketList,
+                  formVisibleOnPage: false,
+                timesClicked:0 });
+  }
+
   handleClick = () => {
     if (this.state.formVisibleOnPage){
       this.setState(({
@@ -47,10 +56,10 @@ class TicketControl extends React.Component {
         buttonText = "Really, Really, Really Add Ticket?";
       }
       else if (this.state.formVisibleOnPage && this.state.timesClicked > 3) {
-        currentlyVisibleState = <NewTicketForm />;
+        currentlyVisibleState = <NewTicketForm onNewTicketCreation={this.handleAddingNewTicketToList} />
         buttonText = "Return to Ticket List";
       } else {
-        currentlyVisibleState = <TicketList />;
+        currentlyVisibleState = <TicketList ticketList = {this.state.mainTicketList} />;
         buttonText = "Add Ticket";
       }
       return (
